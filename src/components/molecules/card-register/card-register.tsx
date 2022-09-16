@@ -7,6 +7,8 @@ import '../card.css'
 
 function CardRegister() {
   const formRef = useRef<any>()
+  let categoriesSelected: any = {}
+  let item
   const {
     userName,
     setUserName,
@@ -16,9 +18,10 @@ function CardRegister() {
     setPassword,
     samePassword,
     setSamePassword,
+    setCategories,
     error,
     info,
-    infoPassword
+    active
   } = useRegister()
 
   const userNameChange = (event: { target: { value: React.SetStateAction<string> } }) => {
@@ -32,6 +35,35 @@ function CardRegister() {
   }
   const samePasswordChange = (event: { target: { value: React.SetStateAction<string> } }) => {
     setSamePassword(event.target.value)
+  }
+
+  function getLocalStorage() {
+    item = localStorage.getItem('categories')
+
+    if (item) {
+      categoriesSelected = JSON.parse(item)
+    } else {
+      categoriesSelected = {}
+    }
+
+    return categoriesSelected
+  }
+
+  const checkedChange = (event: {
+    target: { checked: any; value: React.SetStateAction<string> }
+  }) => {
+    if (event.target.checked) {
+      if (!getLocalStorage()[event.target.value.toString()]) {
+        categoriesSelected[event.target.value.toString()] = event.target.value
+      }
+      localStorage.setItem('categories', JSON.stringify(categoriesSelected))
+    } else {
+      if (getLocalStorage()[event.target.value.toString()]) {
+        categoriesSelected[event.target.value.toString()] = undefined
+      }
+      localStorage.setItem('categories', JSON.stringify(categoriesSelected))
+    }
+    setCategories(localStorage.getItem('categories'))
   }
 
   return (
@@ -48,7 +80,7 @@ function CardRegister() {
           value={userName}
           onChange={userNameChange}
           info={info[0]}
-          error={error}
+          error={error[0]}
         />
         <Input
           type="email"
@@ -59,7 +91,7 @@ function CardRegister() {
           value={mail}
           onChange={mailChange}
           info={info[1]}
-          error={error}
+          error={error[1]}
         />
         <Input
           type="password"
@@ -69,8 +101,8 @@ function CardRegister() {
           label="Contraseña"
           value={password}
           onChange={passwordChange}
-          errorPass={infoPassword}
-          error={error}
+          info={info[2]}
+          error={error[2]}
         />
         <Input
           type="password"
@@ -81,7 +113,7 @@ function CardRegister() {
           value={samePassword}
           onChange={samePasswordChange}
           info={info[3]}
-          error={error}
+          error={error[3]}
         />
         <h2>Categorias</h2>
         <div className="card-body__categories">
@@ -94,12 +126,15 @@ function CardRegister() {
               'Drama',
               'Inteligencia Artificial'
             ]}
+            onChange={checkedChange}
+            info={info[4]}
+            error={error[4]}
           />
         </div>
       </section>
       <section className="card-footer">
         <Link to="/signin">Iniciar Sesion</Link>
-        <Button color="primary" size="medium">
+        <Button color="primary" size="medium" disabled={active}>
           Registrar
         </Button>
       </section>

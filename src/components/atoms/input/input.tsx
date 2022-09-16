@@ -11,7 +11,6 @@ export interface InputProps {
   placeholder?: string
   value?: string
   info?: string
-  errorPass?: string[]
   error?: boolean
   label?: string
   label_checkbox?: string[]
@@ -42,11 +41,12 @@ export const Input: FC<InputProps> = (props: InputProps) => {
               className="input__checkbox"
               type={props.type}
               disabled={props.disabled}
-              id={props.id}
-              name={props.name}
-              value={props.value}
+              id={data.toLowerCase()}
+              name={data.toLowerCase()}
+              value={data}
+              onChange={props.onChange}
             />
-            <label className={inputLabel} htmlFor={props.id}>
+            <label className={inputLabel} htmlFor={data.toLowerCase()}>
               {data}
             </label>
           </div>
@@ -73,9 +73,6 @@ export const Input: FC<InputProps> = (props: InputProps) => {
           />
         </section>
         {props.info && <span className={inputInfoClass}>{props.info}</span>}
-        {props.errorPass?.map((infoPass) => (
-          <span className={inputInfoClass}>{infoPass}</span>
-        ))}
       </div>
     )
   }

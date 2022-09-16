@@ -1,94 +1,126 @@
 import React, { useState, useEffect } from 'react'
 
 function useRegister() {
+  const dataInfo: string[] = ['', '', '', '', '']
+  const errorInputs: boolean[] = [false, false, false, false, false]
   //Estados
   const [userName, setUserName] = useState<string>('')
-  const [mail, setMail] = useState<string>(' ')
+  const [mail, setMail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const [error, setError] = useState<boolean>(false)
+  const [error, setError] = useState<boolean[]>(errorInputs)
   const [samePassword, setSamePassword] = useState<string>('')
-  const [info, setInfo] = useState<any[]>(['', '', '', '', ''])
-  const [infoPassword, setInfoPassword] = useState<string[]>(['', '', '', '', ''])
-  //const [openModal, setOpenModal] = useState([false, ''])
-  const dataInfo: string[] = ['', '', '', '', '']
-  let dataPassword: string[] = ['', '', '', '', '']
+  const [info, setInfo] = useState<string[]>(dataInfo)
+  const [categories, setCategories] = useState<any>('{}')
+  const [active, setActive] = useState<boolean>(true)
 
   useEffect(() => {
     //Validar Usuario
     if (userName.length > 0) {
-      setError(false)
       dataInfo[0] = ''
+      errorInputs[0] = false
+      setError(errorInputs)
       setInfo(dataInfo)
     } else {
-      setError(true)
       dataInfo[0] = 'Nombre de usuario es requerido'
+      errorInputs[0] = true
+      setError(errorInputs)
       setInfo(dataInfo)
     }
 
     //Validar Correo
     if (!(mail.length > 0)) {
-      setError(true)
       dataInfo[1] = 'Correo es requerido'
+      errorInputs[1] = true
+      setError(errorInputs)
       setInfo(dataInfo)
     } else if (
       !mail.match(
         /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/
       )
     ) {
-      setError(true)
       dataInfo[1] = 'Ingrese un correo valido'
+      errorInputs[1] = true
+      setError(errorInputs)
       setInfo(dataInfo)
     } else {
-      setError(false)
       dataInfo[1] = ''
+      errorInputs[1] = false
+      setError(errorInputs)
       setInfo(dataInfo)
     }
 
     //Validar Password
     if (!(password.length >= 8)) {
-      setError(true)
-      dataPassword[0] = 'Tener un mínimo de 8 caracteres.\n'
-      setInfoPassword(dataPassword)
-    }
-
-    if (!password.match(/[A-Z]/)) {
-      setError(true)
-      dataPassword[1] += 'Tener un carácter en mayúscula.\n'
-      setInfoPassword(dataPassword)
-    }
-
-    if (!password.match(/[0-9]$/)) {
-      setError(true)
-      dataPassword[2] += 'Tener un carácter numérico.\n'
-      setInfoPassword(dataPassword)
-    }
-
-    if (!password.match(/[^\w]/)) {
-      setError(true)
-      dataPassword[3] += 'Tener un carácter especial.'
-      setInfoPassword(dataPassword)
+      dataInfo[2] = 'Tener un mínimo de 8 caracteres.\n'
+      errorInputs[2] = true
+      setError(errorInputs)
+      setInfo(dataInfo)
+    } else if (!password.match(/[A-Z]/)) {
+      dataInfo[2] += 'Tener un carácter en mayúscula.\n'
+      errorInputs[2] = true
+      setError(errorInputs)
+      setInfo(dataInfo)
+    } else if (!password.match(/[0-9]$/)) {
+      dataInfo[2] += 'Tener un carácter numérico.\n'
+      errorInputs[2] = true
+      setError(errorInputs)
+      setInfo(dataInfo)
+    } else if (!password.match(/[^\W]/)) {
+      dataInfo[2] += 'Tener un carácter especial.'
+      errorInputs[2] = true
+      setError(errorInputs)
+      setInfo(dataInfo)
     } else {
-      setError(false)
-      dataPassword = ['', '']
-      setInfoPassword(dataPassword)
+      dataInfo[2] = ''
+      errorInputs[2] = false
+      setError(errorInputs)
+      setInfo(dataInfo)
     }
 
     if (!(samePassword.length > 0)) {
-      setError(true)
       dataInfo[3] = 'Confirmar contraseña requerida'
+      errorInputs[3] = true
+      setError(errorInputs)
       setInfo(dataInfo)
-    } else if (samePassword === password) {
-      setError(true)
+    } else if (samePassword !== password) {
       dataInfo[3] = 'Contraseñas no coinsiden'
+      errorInputs[3] = true
+      setError(errorInputs)
       setInfo(dataInfo)
     } else {
-      setError(false)
       dataInfo[3] = ''
+      errorInputs[3] = false
+      setError(errorInputs)
       setInfo(dataInfo)
     }
-  }, [userName, mail, password, samePassword])
 
-  console.log(infoPassword)
+    const dataCategories = JSON.parse(categories)
+    const arrayCategories = Object.values(dataCategories)
+    //console.log(arrayCategories)
+
+    if (arrayCategories.length >= 3) {
+      dataInfo[4] = ''
+      errorInputs[4] = false
+      setError(errorInputs)
+      setInfo(dataInfo)
+    } else {
+      dataInfo[4] = 'Debe seleccionar al menos 3 categorias'
+      errorInputs[4] = true
+      setError(errorInputs)
+      setInfo(dataInfo)
+    }
+
+    const viewError = error.some((value) => {
+      return value
+    })
+    console.log(error)
+
+    if (viewError) {
+      setActive(true)
+    } else {
+      setActive(false)
+    }
+  }, [userName, mail, password, samePassword, categories])
 
   return {
     userName,
@@ -99,9 +131,10 @@ function useRegister() {
     setPassword,
     samePassword,
     setSamePassword,
+    setCategories,
     error,
     info,
-    infoPassword
+    active
   }
 }
 
