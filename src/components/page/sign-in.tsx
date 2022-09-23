@@ -1,5 +1,5 @@
 import React from 'react'
-import { CardSignIn } from '../molecules/card-signin/card-signin'
+import { CardSignIn } from '../organismos/card-signin/card-signin'
 
 function SignIn() {
   return <CardSignIn />

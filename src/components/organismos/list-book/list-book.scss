@@ -1,0 +1,35 @@
+.books{
+    width: 80%;
+    min-width: 288px;
+    margin: 0 auto;
+    &__controls{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        select {
+            width: 180px;
+            border-radius: 5px;
+            height: 35px;
+            outline: none;
+            border: none;
+            border: 1px solid #d1d1d1;
+        }
+    }
+    &__catalog {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        
+        &__card{
+            border-radius: 5px;
+            width: 300px;
+            min-height: 300px;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        }
+        &__card:hover{
+            opacity: 30%;
+            cursor: pointer;
+        }
+    }
+}

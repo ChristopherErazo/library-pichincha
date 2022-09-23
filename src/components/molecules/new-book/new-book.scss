@@ -1,0 +1,16 @@
+.new-book{
+    width: 80%;
+    margin: 0 auto;
+    min-width: 288px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 55px;
+    &__button{
+        text-decoration: none;
+        color: rgb(35, 4, 79);
+        border-radius: 5px;
+        background-color: rgb(198, 196, 217);
+        padding: 10px 20px;
+    }
+}

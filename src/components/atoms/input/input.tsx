@@ -36,7 +36,7 @@ export const Input: FC<InputProps> = (props: InputProps) => {
     return (
       <>
         {props.label_checkbox?.map((data) => (
-          <div className="input-checkbox">
+          <div key={data} className="input-checkbox">
             <input
               className="input__checkbox"
               type={props.type}
@@ -54,26 +54,25 @@ export const Input: FC<InputProps> = (props: InputProps) => {
         {props.info && <span className={inputInfoClass}>{props.info}</span>}
       </>
     )
-  } else {
-    return (
-      <div className="input">
-        <label className={inputLabel} htmlFor={props.id}>
-          {props.label}
-        </label>
-        <section className={inputClass}>
-          <input
-            className="input__container__text-area"
-            type={props.type}
-            disabled={props.disabled}
-            id={props.id}
-            name={props.name}
-            placeholder={props.placeholder}
-            value={props.value}
-            onChange={props.onChange}
-          />
-        </section>
-        {props.info && <span className={inputInfoClass}>{props.info}</span>}
-      </div>
-    )
   }
+  return (
+    <div className="input">
+      <label className={inputLabel} htmlFor={props.id}>
+        {props.label}
+      </label>
+      <section className={inputClass}>
+        <input
+          className="input__container__text-area"
+          type={props.type}
+          disabled={props.disabled}
+          id={props.id}
+          name={props.name}
+          placeholder={props.placeholder}
+          value={props.value}
+          onChange={props.onChange}
+        />
+      </section>
+      {props.info && <span className={inputInfoClass}>{props.info}</span>}
+    </div>
+  )
 }
